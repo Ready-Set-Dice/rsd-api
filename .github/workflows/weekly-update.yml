@@ -37,12 +37,15 @@ jobs:
           mv .foundry/static/template.json static/.
           mv .foundry/static/lang/en.json static/lang/.
           mv .foundry/static/lang/re-en.json static/lang/.
+          cat tmp
+      - name: prepare zip for artifact
+        run: zip packs.zip -r ./packs
       - name: make artifacts
         uses: actions/upload-artifact@v3
         with:
           name: foundry-data
           path: |
-            packs
+            packs.zip
             static
             tmp
   check-compatible:
@@ -55,6 +58,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: foundry-data
+      - name: unzip the artifact
+        run: unzip packs.zip
       - name: setup the correct version of node
         uses: actions/setup-node@v3
         with:
