@@ -73,7 +73,7 @@ jobs:
       - name: checkout current repo
         uses: actions/checkout@v3
         with:
-          ssh-key: ${{ secrets.GITSERVICE_ED_SSH }}
+          ssh-key: ${{ secrets.GITSERVICE_RSA }}
           persist-credentials: true
       - name: update the .env file
         run: |
