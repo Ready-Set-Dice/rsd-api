@@ -77,14 +77,18 @@ jobs:
           . ./.env
           NEW_VERSION=$((BASE_VERSION+1))
           sed -i 's|BASE_VERSION='$BASE_VERSION'|BASE_VERSION='$NEW_VERSION'|g' ./.env
-      - name: update repo
-        uses: EndBug/add-and-commit@v9
+      - name: commit .env
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .env
+          git commit -m "Updated api version"
+      - name: push changes
+        uses: ad-m/github-push-action@master
         with:
-          message: Updating api version
-          committer_name: rsd-gitservice
-          committer_email: gitservice@readysetdice.com
-          add: '.env'
-          push: '--force'
+          github_token: ${{ secrets.GH_TOKEN }}
+          branch: main
+          force: true
   shutdown-and-remove:
     runs-on: ubuntu-latest
     needs: check-compatible
