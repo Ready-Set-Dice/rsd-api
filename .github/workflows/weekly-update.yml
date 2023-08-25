@@ -79,14 +79,14 @@ jobs:
           sed -i 's|BASE_VERSION='$BASE_VERSION'|BASE_VERSION='$NEW_VERSION'|g' ./.env
       - name: commit .env
         run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "gitservice@readysetdice.com"
+          git config --local user.name "rsd-gitservice"
           git add .env
           git commit -m "Updated api version"
       - name: push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.GITSERVICE_TOKEN }}
           branch: main
           force: true
   shutdown-and-remove:
