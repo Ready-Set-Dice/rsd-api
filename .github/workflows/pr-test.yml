@@ -1,0 +1,14 @@
+name: pr-test
+run-name: 'Test the code whenever a pull request is opened'
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  undefined-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: No tests defined
+        run: echo 'No tests defined yet'
+        

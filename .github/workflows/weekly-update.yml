@@ -1,0 +1,63 @@
+name: weekly-update
+run-name: 'Weekly check for changes in the foundry data repository'
+
+on:
+  schedule:
+    - cron: 0 3 * * 2
+
+jobs:
+  get-foundry:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout current repo
+        uses: actions/checkout@v3
+      - name: checkout foundry repo
+        uses: actions/checkout@v3
+        with:
+          repository: foundryvtt/pf2e.git
+          ref: 'main'
+          path: '.foundry'
+      - name: get foundry repo hash
+        run: git --git-dir .foundry/.git rev-parse HEAD >> tmp
+      - name: compare previous hash to current
+        run: |
+          diff --brief tmp foundry-hash >/dev/null
+          comp=$?
+          if [ $comp -eq 1 ]
+          then
+            echo 'New version detected'
+          else
+            exit 1
+          fi
+      - name: move files if new version
+        run: |
+          mv .foundry/packs .
+          mkdir static
+          mkdir static/lang
+          mv .foundry/static/template.json static/.
+          mv .foundry/static/lang/en.json static/lang/.
+          mv .foundry/static/lang/re-en.json static/lang/.
+      - name: make artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: foundry-data
+          path: |
+            packs
+            static
+            tmp
+  check-compatible:
+    runs-on: ubuntu-latest
+    needs: get-foundry
+    steps:
+      - name: checkout current repo
+        uses: actions/checkout@v3
+      - name: retrieve artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: foundry-data
+      - name: setup the correct version of node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.2'
+      - name: perform integration test
+        run: npm run test
