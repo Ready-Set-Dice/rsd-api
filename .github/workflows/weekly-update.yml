@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: foundryvtt/pf2e.git
-          ref: 'main'
+          ref: 'master'
           path: '.foundry'
       - name: get foundry repo hash
         run: git --git-dir .foundry/.git rev-parse HEAD >> tmp
