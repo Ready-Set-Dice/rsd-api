@@ -2,7 +2,7 @@ name: weekly-update
 run-name: 'Weekly check for changes in the foundry data repository'
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
   schedule:
     - cron: '0 3 * * 2'
 
