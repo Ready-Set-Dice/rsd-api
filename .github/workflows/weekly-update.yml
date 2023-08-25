@@ -72,6 +72,9 @@ jobs:
     steps:
       - name: checkout current repo
         uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.GITSERVICE_ED_SSH }}
+          persist-credentials: true
       - name: update the .env file
         run: |
           . ./.env
@@ -81,13 +84,12 @@ jobs:
         run: |
           git config --local user.email "gitservice@readysetdice.com"
           git config --local user.name "rsd-gitservice"
-          git add .env
-          git commit -m "Updated api version"
+          git commit -a -m "Updated api version"
       - name: push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITSERVICE_TOKEN }}
-          branch: main
+          ssh: true
+          branch: ${{ github.ref }}
           force: true
   shutdown-and-remove:
     runs-on: ubuntu-latest
