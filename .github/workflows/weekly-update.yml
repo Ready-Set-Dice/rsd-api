@@ -80,7 +80,11 @@ jobs:
       - name: update repo
         uses: EndBug/add-and-commit@v9
         with:
-          default_author: github_actions
+          message: Updating api version
+          committer_name: rsd-gitservice
+          committer_email: gitservice@readysetdice.com
+          add: '.env'
+          push: '--force'
   shutdown-and-remove:
     runs-on: ubuntu-latest
     needs: check-compatible
@@ -95,8 +99,9 @@ jobs:
           script: |
             pm2 stop db
             pm2 delete db
-            rm -rf ~/rsd/api/packs
-            rm -rf ~/rsd/api/static
+            cd ~/rsd/api/
+            rm -rf ./packs
+            rm -rf ./static
             git pull
   deploy-job:
     runs-on: ubuntu-latest
