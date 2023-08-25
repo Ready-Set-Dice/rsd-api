@@ -22,16 +22,12 @@ jobs:
         run: git --git-dir .foundry/.git rev-parse HEAD >> tmp
       - name: compare previous hash to current
         run: |
-          cat tmp
-          cat .foundry-hash
-          diff --brief tmp .foundry-hash >/dev/null
-          comp_value=$?
-          if [ $comp_value -eq 1 ]
+          if diff tmp .foundry-hash >/dev/null
           then
-            echo 'New version detected'
-          else
             echo 'Versions match'
             exit 1
+          else
+            echo 'Versions differ'
           fi
       - name: move files if new version
         run: |
