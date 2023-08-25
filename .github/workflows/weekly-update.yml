@@ -65,4 +65,6 @@ jobs:
         with:
           node-version: '18.2'
       - name: perform integration test
-        run: npm run test
+        run: |
+          npm ci
+          npm run test
