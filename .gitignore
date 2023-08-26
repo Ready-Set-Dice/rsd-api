@@ -1,2 +1,6 @@
+# Node specific
+node_modules/
+
 # rsd specific
 .foundry/
+tmp

@@ -116,10 +116,10 @@ const DeitiesRoute = new (require(path.resolve('./route/AbstractRoute')))('deiti
 app.use('/deities', DeitiesRoute.router);
 
 const DOMAINS_VERSION = Number(process.env.BASE_VERSION) + Number(process.env.DOMAINS_VERSION)
-const DomainsRoute = new (require(path.resolve('./route/AbstractRoute')))('domains', DOMAINS_VERSION, (c) => {
-    if (!!c && !!c.content) {
-        c.foundryContent = c.content
-        c.content = RouteHelper.regexRemove(c.content)
+const DomainsRoute = new (require(path.resolve('./route/JournalRoute')))('domains', DOMAINS_VERSION, (c) => {
+    if (!!c && !!c.text && !!c.text.content) {
+        c.foundryContent = c.text.content
+        c.content = RouteHelper.regexRemove(c.text.content)
     }
 
     return c
