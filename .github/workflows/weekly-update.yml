@@ -46,6 +46,7 @@ jobs:
           path: |
             foundry.zip
       - name: upload foundry hash artifact
+        uses: actions/upload-artifact@v3
         with:
           name: foundry-hash
           path: |
