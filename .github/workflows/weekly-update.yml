@@ -37,22 +37,26 @@ jobs:
           mv .foundry/static/template.json static/.
           mv .foundry/static/lang/en.json static/lang/.
           mv .foundry/static/lang/re-en.json static/lang/.
-          cat tmp
       - name: prepare zip for artifact
-        run: zip foundry.zip -r ./packs ./static tmp
-      - name: make artifacts
+        run: zip foundry.zip -r ./packs ./static
+      - name: upload foundry data artifact
         uses: actions/upload-artifact@v3
         with:
           name: foundry-data
           path: |
             foundry.zip
+      - name: upload foundry hash artifact
+        with:
+          name: foundry-hash
+          path: |
+            tmp
   check-compatible:
     runs-on: ubuntu-latest
     needs: get-foundry
     steps:
       - name: checkout current repo
         uses: actions/checkout@v3
-      - name: retrieve artifact
+      - name: retrieve foundry data artifact
         uses: actions/download-artifact@v3
         with:
           name: foundry-data
@@ -75,6 +79,14 @@ jobs:
         with:
           ssh-key: ${{ secrets.GITSERVICE_RSA }}
           persist-credentials: true
+      - name: retrieve foundry hash artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: foundry-hash
+      - name: replace old foundry hash
+        run: |
+          rm .foundry-hash
+          mv tmp .foundry-hash
       - name: update the .env file
         run: |
           . ./.env
