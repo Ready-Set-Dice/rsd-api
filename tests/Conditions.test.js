@@ -27,7 +27,7 @@ describe(`${typeTest} - Compatibility Test`, function () {
 
 
     test('Initial check', async () => {
-        await new Promise((r) => setTimeout(r, 1000));
+        await new Promise((r) => setTimeout(r, 1000))
 
         expect(AbstractRoute).toHaveProperty('single')
         expect(AbstractRoute.single).toHaveProperty('count')
@@ -38,7 +38,7 @@ describe(`${typeTest} - Compatibility Test`, function () {
 
 
     test(`Test for desired features - ${urlEnding}`, async () => {
-        await new Promise((r) => setTimeout(r, 1000));
+        await new Promise((r) => setTimeout(r, 1000))
 
         return AbstractRoute.single.results.forEach(r => {
 
@@ -53,11 +53,47 @@ describe(`${typeTest} - Compatibility Test`, function () {
 
             expect(r).toHaveProperty('system.description')
             expect(r).toHaveProperty('system.description.value')
+            expect(r).toHaveProperty('system.duration')
+            expect(r).toHaveProperty('system.duration.value')
             expect(r).toHaveProperty('system.rules')
+            expect(r).toHaveProperty('system.value')
+            expect(r).toHaveProperty('system.value.isValued')
+            expect(r).toHaveProperty('system.value.value')
 
             expect(r.system.description.value).toEqual(expect.any(String))
+            expect(r.system.duration.value).toEqual(expect.any(Number))
+            expect(r.system.overrides).toEqual(expect.any(Array))
             expect(r.system.rules).toEqual(expect.any(Array))
+            expect(r.system.value.isValued).toEqual(expect.any(Boolean))
+            if (!!r.system.value.isValued) {
+                expect(r.system.value.value).toEqual(expect.any(Number))
+            } else {
+                expect(r.system.value.value).toBeNull()
+            }
         })
 
     })
-});
+    
+    test(`Sample test - ${urlEnding}`, async () => {
+        await new Promise((r) => setTimeout(r, 1000))
+
+        return AbstractRoute.single.results.forEach(r => {
+            if (!!r && !!r.name && r.name == 'Dying') {
+                expect(r._id).toEqual('yZRUzMqrMmfLu0V1')
+                expect(r.system.duration.value).toEqual(0)
+                expect(r.system.value.isValued).toBeTruthy()
+                expect(r.system.value.value).toEqual(1)
+            } else if (!!r && !!r.name && r.name == 'Frightened') {
+                expect(r._id).toEqual('TBSHQspnbcqxsmjL')
+                expect(r.system.duration.value).toEqual(0)
+                expect(r.system.value.isValued).toBeTruthy()
+                expect(r.system.value.value).toEqual(1)
+            } else if (!!r && !!r.name && r.name == 'Off-Guard') {
+                expect(r._id).toEqual('AJh5ex99aV6VTggg')
+                expect(r.system.duration.value).toEqual(0)
+                expect(r.system.value.isValued).toBeFalsy()
+                expect(r.system.value.value).toBeNull()
+            }
+        })
+    })
+})
