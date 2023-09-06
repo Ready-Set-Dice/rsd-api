@@ -4,6 +4,7 @@ const path = require('path');
 const PACKSPATH = './packs';
 const DATAPATH = './data';
 const TRANSLATEPATH = './translate';
+const STATICPATH = './static';
 
 if (fs.existsSync(PACKSPATH)) {
     console.log('The packs folder exists, starting the translation layer.');
@@ -12,7 +13,7 @@ if (fs.existsSync(PACKSPATH)) {
         fs.mkdirSync(DATAPATH);
     }
 
-    const conditionsTranslator = new (require(path.resolve(`${TRANSLATEPATH}/conditions.js`)))(PACKSPATH, DATAPATH);
+    const conditionsTranslator = new (require(path.resolve(`${TRANSLATEPATH}/conditions.js`)))(PACKSPATH, DATAPATH, STATICPATH);
     conditionsTranslator.processPack();
 
 } else {

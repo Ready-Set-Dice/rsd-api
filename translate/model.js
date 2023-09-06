@@ -1,10 +1,13 @@
-import { v4 as uuidv4 } from 'uuid'
+const uuidv4 = require('uuid').v4;
 
 class DataModel {
     data = {
         id: null,
+        description: null,
+        hash: null,
         name: null,
-        type: null
+        type: null,
+        version: null,
     };
 
     constructor(name, type) {
@@ -21,6 +24,9 @@ class DataModel {
         return JSON.stringify(this.data);
     }
 
+    importJS(data) {
+        this.data = data;
+    }
     importJSON(data) {
         this.data = JSON.parse(data); 
     }

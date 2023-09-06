@@ -2,6 +2,7 @@
 node_modules/
 
 # rsd specific
+.shared/
 .foundry/
 static/
 packs/
